@@ -1,3 +1,4 @@
+from tree.node import Node
 import asyncio
 from queue import Queue
 
@@ -88,7 +89,7 @@ class BinaryTree:
             return hright + 1
         return hleft + 1
 
-    def levelorder_traversal(self, node=self.ROOT, function=print):
+    def levelorder_traversal(self, node="root", function=print):
         if node == self.ROOT:
             node = self.root
 

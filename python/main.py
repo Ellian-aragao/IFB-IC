@@ -1,3 +1,6 @@
+from tree.node import Node
+from tree.binaryTrees.binaryTree import BinaryTree
+
 array = []
 
 
@@ -8,7 +11,7 @@ def salve_value(node=None):
 
 
 if __name__ == "__main__":
-    tree = BinaryTree(
+    BinaryTree(
         node=Node(
             'Brasil',
             Node(
@@ -30,4 +33,4 @@ if __name__ == "__main__":
                 )
             )
         )
-    )
+    ).breadth_first_search()
