@@ -1,97 +1,99 @@
-class AB:
-    def __init__(self, a, b, distance=0):
-        self.a = a
-        self.b = b
-        self.distance = distance
+from __future__ import annotations
+from typing import List
 
 
 class Node:
-    def __init__(self, data, distance, children=None):
+    def __init__(self, data: str, distance: float, children: List[A2B] = []):
         self.data = data
         self.distance = distance
         self.children = children
+
+    def busca_a_estrela(self, array: List[A2B] = []) -> List[A2B]:
+        var: A2B = sorted(self.children, reverse=True, key=(
+            lambda x: x.get_a_distance_b_plus_b_final()
+        )).pop()
+        array.append(var)
+        if var.get_a_distance_b_plus_b_final() != 0:
+            var.b.busca_a_estrela(array)
+        return array
 
     def __str__(self):
         return str(self.data)
 
 
-def busca_a_estrela(raiz):
-    if raiz is None:
-        raise ValueError('Can not send something is not a Node')
+class A2B:
+    def __init__(self, a: Node, b: Node, distance=0):
+        self.a = a
+        self.b = b
+        self.distance = distance
 
-    ordered_list = [{'ab': child, 'delta': child.b.distance + child.distance}
-                    for child in raiz.children]
-    ordered_list.sort(key=(lambda x: x.get('delta')))
+    def get_a_distance_b_plus_b_final(self) -> float:
+        return self.distance + self.b.distance
 
-    array.append(ordered_list[0].get('ab'))
-
-    if ordered_list[0].get('delta') != 0:
-        busca_a_estrela(ordered_list[0].get('ab').b)
+    def __str__(self):
+        return '{} -> {}'.format(self.a, self.b)
 
 
-array = []
-
-if __name__ == "__main__":
-    arad = Node("arad", 366)
-    zerind = Node("zerind", 374)
-    timisoara = Node("timisoara", 329)
-    oradea = Node("oradea", 380)
-    sibiu = Node("sibiu", 253)
-    fagaras = Node("fagaras", 178)
-    rimnicu = Node("rimnicu", 193)
-    pitesti = Node("pitesti", 98)
-    bucacharest = Node("bucacharest", 0)
-    cralova = Node("cralova", 160)
+if __name__ == '__main__':
+    arad = Node('arad', 366)
+    zerind = Node('zerind', 374)
+    timisoara = Node('timisoara', 329)
+    oradea = Node('oradea', 380)
+    sibiu = Node('sibiu', 253)
+    fagaras = Node('fagaras', 178)
+    rimnicu = Node('rimnicu', 193)
+    pitesti = Node('pitesti', 98)
+    bucacharest = Node('bucacharest', 0)
+    cralova = Node('cralova', 160)
 
     arad.children = {
-        AB(arad, zerind, 75),
-        AB(arad, sibiu, 140),
-        AB(arad, timisoara, 118)
+        A2B(arad, zerind, 75),
+        A2B(arad, sibiu, 140),
+        A2B(arad, timisoara, 118)
     }
 
     zerind.children = {
-        AB(zerind, oradea, 71),
-        AB(zerind, arad, 75)
+        A2B(zerind, oradea, 71),
+        A2B(zerind, arad, 75)
     }
 
     oradea.children = {
-        AB(oradea, zerind, 71),
-        AB(oradea, sibiu, 151)
+        A2B(oradea, zerind, 71),
+        A2B(oradea, sibiu, 151)
     }
 
     timisoara.children = {
-        AB(timisoara, arad, 118)
+        A2B(timisoara, arad, 118)
     }
 
     sibiu.children = {
-        AB(sibiu, arad, 140),
-        AB(sibiu, rimnicu, 80),
-        AB(sibiu, fagaras, 99),
-        AB(sibiu, oradea, 151)
+        A2B(sibiu, arad, 140),
+        A2B(sibiu, rimnicu, 80),
+        A2B(sibiu, fagaras, 99),
+        A2B(sibiu, oradea, 151)
     }
 
     fagaras.children = {
-        AB(fagaras, sibiu, 99),
-        AB(fagaras, bucacharest, 221)
+        A2B(fagaras, sibiu, 99),
+        A2B(fagaras, bucacharest, 221)
     }
 
     rimnicu.children = {
-        AB(rimnicu, sibiu, 80),
-        AB(rimnicu, cralova, 146),
-        AB(rimnicu, pitesti, 97)
+        A2B(rimnicu, sibiu, 80),
+        A2B(rimnicu, cralova, 146),
+        A2B(rimnicu, pitesti, 97)
     }
 
     pitesti.children = {
-        AB(pitesti, rimnicu, 97),
-        AB(pitesti, cralova, 138),
-        AB(pitesti, bucacharest, 101)
+        A2B(pitesti, rimnicu, 97),
+        A2B(pitesti, cralova, 138),
+        A2B(pitesti, bucacharest, 101)
     }
 
     bucacharest.children = {
-        AB(bucacharest, pitesti, 101),
-        AB(bucacharest, bucacharest, 0)
+        A2B(bucacharest, pitesti, 101),
+        A2B(bucacharest, bucacharest, 0)
     }
 
-    busca_a_estrela(arad)
-    for ab in array:
-        print(ab.a, end=' -> ')
+    for ab in arad.busca_a_estrela():
+        print('{:0>3} | {}'.format(ab.get_a_distance_b_plus_b_final(), ab))
